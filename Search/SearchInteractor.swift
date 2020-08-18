@@ -12,15 +12,27 @@ protocol SearchBusinessLogic {
   func makeRequest(request: Search.Model.Request.RequestType)
 }
 
+
 class SearchInteractor: SearchBusinessLogic {
 
   var presenter: SearchPresentationLogic?
   var service: SearchService?
+    private var networkService = NetworkService()
   
   func makeRequest(request: Search.Model.Request.RequestType) {
     if service == nil {
       service = SearchService()
     }
+    
+    switch request {
+    case .some:
+        print("int some")
+    case .getTracks(let searchTerm):
+        networkService.fetchTracks(searchText: searchTerm) { [weak self] (searchResponse) in
+            self?.presenter?.presentData(response: .presentTracks(searchResponse: searchResponse))
+        }
+    }
+    
   }
   
 }
