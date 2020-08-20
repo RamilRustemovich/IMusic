@@ -29,7 +29,7 @@ class TrackCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+          print("awakeFromNib")
     }
     
     
@@ -37,7 +37,7 @@ class TrackCell: UITableViewCell {
         trackNameLabel.text = viewModel.trackName
         artistNameLabel.text = viewModel.artistName
         collectionNameLabel.text = viewModel.collectionName
-        
+      
     }
     
     
