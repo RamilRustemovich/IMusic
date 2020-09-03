@@ -20,7 +20,7 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
     let searchController = UISearchController(searchResultsController: nil)
     private var searchViewModel = SearchViewModel.init(cells: [])
     private var timer: Timer?
-    
+    private lazy var footerView = FooterView()
 
     // MARK: Setup
     
@@ -48,6 +48,9 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
         setup()
         setupSearchBar()
         setupTableView()
+        
+        // MARK: - TODO
+        searchBar(searchController.searchBar, textDidChange: "eminem")
     }
     
     private func setupSearchBar() {
@@ -60,15 +63,17 @@ class SearchViewController: UIViewController, SearchDisplayLogic {
     private func setupTableView() {
         let nib = UINib(nibName: "TrackCell", bundle: nil)
         table.register(nib, forCellReuseIdentifier: TrackCell.reuseId)
+        table.tableFooterView = footerView
     }
     
     func displayData(viewModel: Search.Model.ViewModel.ViewModelData) {
         switch viewModel {
-        case .some:
-            print("VC some")
+        case .displayFooterView:
+            footerView.showLoader()
         case .displayTracks(let searchViewModel):
             self.searchViewModel = searchViewModel
             self.table.reloadData()
+            footerView.hideLoader()
         }
     }
     
@@ -89,8 +94,29 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         return cell ?? TrackCell()
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+         let cellViewModel = searchViewModel.cells[indexPath.row]
+        
+        let window = UIApplication.shared.keyWindow
+        let trackDetailView = Bundle.main.loadNibNamed("TrackDetailView", owner: self, options: nil)?.first as! TrackDetailView
+        trackDetailView.set(viewModel: cellViewModel)
+        window?.addSubview(trackDetailView)
+    }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 84
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let label = UILabel()
+        label.text = "Please enter search term above..."
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        return label
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return searchViewModel.cells.count > 0 ? 0 : 250
     }
     
 }
