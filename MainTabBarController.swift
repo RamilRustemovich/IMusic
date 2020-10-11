@@ -31,9 +31,12 @@ class MainTabBarController: UITabBarController {
         searchVC.tabBarDelegate = self
         
         let navigationSearchVC = generateViewController(rootViewController: searchVC, image: #imageLiteral(resourceName: "search"), title: "Search")
-        let contentView = UIHostingController(rootView: ContentView())
-        let libraryVC = generateViewController(rootViewController: contentView, image: #imageLiteral(resourceName: "library"), title: "Library")
-        viewControllers = [navigationSearchVC, libraryVC]
+        let libraryView = UIHostingController(rootView: Library())
+        libraryView.tabBarItem.image = #imageLiteral(resourceName: "library")
+        libraryView.tabBarItem.title = "Library"
+        //let libraryVC = generateViewController(rootViewController: libraryView, image: #imageLiteral(resourceName: "library"), title: "Library")
+        //viewControllers = [navigationSearchVC, libraryVC]
+        viewControllers = [libraryView, navigationSearchVC]
         
         setupTrackDetailView()
     }
