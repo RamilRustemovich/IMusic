@@ -11,7 +11,7 @@ import SDWebImage
 import AVKit
 
 
-protocol TrackMovingDelegate: class {
+protocol TrackMovingDelegate {
     func moveBackForPreviousTrack() -> SearchViewModel.Cell?
     func moveForwardForPreviousTrack() -> SearchViewModel.Cell?
 }
@@ -42,7 +42,7 @@ class TrackDetailView: UIView {
         return avPlayer
     }()
     
-    weak var delegate: TrackMovingDelegate?
+    var delegate: TrackMovingDelegate?
     weak var tabBarDelegate: MainTabBarControllerDelegate?
     
     // MARK: - init
@@ -233,13 +233,13 @@ class TrackDetailView: UIView {
     @IBAction func playPauseAction(_ sender: UIButton) {
         if player.timeControlStatus == .paused {
             player.play()
-            //playPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
-            sender.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
+            playPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
+            miniPlayPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
             enlargeTrackImageView()
         } else {
             player.pause()
-            //playPauseButton.setImage(#imageLiteral(resourceName: "play"), for: .normal)
-            sender.setImage(#imageLiteral(resourceName: "play"), for: .normal)
+            playPauseButton.setImage(#imageLiteral(resourceName: "play"), for: .normal)
+            miniPlayPauseButton.setImage(#imageLiteral(resourceName: "play"), for: .normal)
             reduceTrackImageView()
         }
     }
